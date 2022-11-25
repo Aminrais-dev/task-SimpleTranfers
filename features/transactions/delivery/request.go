@@ -34,13 +34,6 @@ func (req *Request) toCore() transactions.TransactionCore {
 
 func (req *FilterSearch) toFilter() transactions.Filter {
 
-	if req.Filter == nil {
-		return transactions.Filter{
-			Credit_account: 0,
-			Debit_account:  0,
-		}
-	}
-
 	if len(req.Filter) == 1 {
 		return transactions.Filter{
 			Credit_account: req.Filter[0].Credit_account,
@@ -48,9 +41,24 @@ func (req *FilterSearch) toFilter() transactions.Filter {
 		}
 	}
 
+	if len(req.Filter) == 2 {
+		if req.Filter[0].Credit_account > 0 {
+			return transactions.Filter{
+				Credit_account: req.Filter[0].Credit_account,
+				Debit_account:  req.Filter[1].Debit_account,
+			}
+
+		} else {
+			return transactions.Filter{
+				Credit_account: req.Filter[1].Credit_account,
+				Debit_account:  req.Filter[0].Debit_account,
+			}
+		}
+	}
+
 	return transactions.Filter{
-		Credit_account: req.Filter[0].Credit_account,
-		Debit_account:  req.Filter[1].Debit_account,
+		Credit_account: 0,
+		Debit_account:  0,
 	}
 
 }

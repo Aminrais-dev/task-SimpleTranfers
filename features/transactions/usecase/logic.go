@@ -19,7 +19,7 @@ func New(data transactions.DataInterface) transactions.UsecaseInterface {
 
 func (service *Service) PostTransaction(data transactions.TransactionCore) (transactions.TransactionCore, int) {
 
-	if data.Debit_account < 1 || data.Credit_account < 1 || data.Amount < 0 {
+	if data.Debit_account < 1 || data.Credit_account < 1 || data.Amount <= 0 {
 		return transactions.TransactionCore{}, -1
 	} else if data.Transaction_id == uuid.Nil {
 		return transactions.TransactionCore{}, -2

@@ -1,7 +1,6 @@
 package delivery
 
 import (
-	"log"
 	"task/simpleTranfers/features/transactions"
 	"task/simpleTranfers/utils/helper"
 
@@ -30,6 +29,10 @@ func (delivery *Delivery) CreateTransaction(c echo.Context) error {
 	err := c.Bind(&req)
 	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper(400, "error bind"))
+	}
+
+	if req.Credit_account == req.Debit_account {
+		return c.JSON(400, helper.FailedResponseHelper(400, "Cannot transfer if the sender and recipient are the same"))
 	}
 
 	data, errInt := delivery.service.PostTransaction(req.toCore())
@@ -84,8 +87,6 @@ func (delivery *Delivery) GetTransactionBySearch(c echo.Context) error {
 	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper(400, "error bind"))
 	}
-
-	log.Println(req)
 
 	data, errInt := delivery.service.GetTransactionBySearch(req.toFilter())
 	if errInt == -1 {
