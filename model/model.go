@@ -11,7 +11,7 @@ import (
 type User struct {
 	Account_no int       `gorm:"autoIncrement;primaryKey"`
 	Name       string    `gorm:"type:char(50)"`
-	Balance    float64   `gorm:"type:float"`
+	Balance    float64   `gorm:"type:float;comment:must be positive"`
 	Created_at time.Time `gorm:"autoCreateTime"`
 }
 
@@ -19,7 +19,7 @@ type Transaction struct {
 	Transaction_id uuid.UUID `gorm:"type:char(36);primary_key"`
 	Amount         float64   `gorm:"type:float"`
 	Credit_account int       `gorm:"index"`
-	Dedit_account  int       `gorm:"index"`
+	Debit_account  int       `gorm:"index"`
 	Created_at     time.Time `gorm:"autoCreateTime"`
 }
 
@@ -58,7 +58,7 @@ func (data *Transaction) ToTransactionCore() transactions.TransactionCore {
 		Transaction_id: data.Transaction_id,
 		Amount:         data.Amount,
 		Credit_account: data.Credit_account,
-		Dedit_account:  data.Dedit_account,
+		Debit_account:  data.Debit_account,
 		Created_at:     data.Created_at,
 	}
 }
@@ -79,7 +79,7 @@ func ToTransactionModel(data transactions.TransactionCore) Transaction {
 		Transaction_id: data.Transaction_id,
 		Amount:         data.Amount,
 		Credit_account: data.Credit_account,
-		Dedit_account:  data.Dedit_account,
+		Debit_account:  data.Debit_account,
 		Created_at:     data.Created_at,
 	}
 
