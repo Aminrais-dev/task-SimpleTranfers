@@ -76,7 +76,7 @@ func (storage *Storage) InsertTransaction(data transactions.TransactionCore, amo
 func (storege *Storage) SelectListTransaction() ([]transactions.TransactionCore, int) {
 
 	var data []model.Transaction
-	tx := storege.db.Find(&data).Order("created_at DESC")
+	tx := storege.db.Order("created_at DESC").Find(&data)
 	if tx.Error != nil {
 		return nil, -1
 	}
